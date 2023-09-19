@@ -2,7 +2,7 @@
 
 const request = require('request');
 const WedgeAntilles = 'https://swapi-api.hbtn.io/api/people/18/';
-const filmsUrl = 'https://swapi-api.hbtn.io/api/films/';
+const filmsUrl = process.argv[2];
 let counter = 0;
 
 request(filmsUrl, (error, response, body) => {
