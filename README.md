@@ -1,2 +1,2 @@
-# holbertonschool-javascript-coding
-A JavaScript learning path at Holberton School
+# A JavaScript learning path at Holberton School
+
