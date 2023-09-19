@@ -10,13 +10,15 @@ request(filmsUrl, (error, response, body) => {
     console.error(error);
     return;
   }
-  const allMovies = JSON.parse(body);
-  for (const result of allMovies.results) {
-    for (const character of result.characters) {
-      if (character === WedgeAntilles) {
-        counter += 1;
+  if (filmsUrl === 'https://swapi-api.hbtn.io/api/films/') {
+    const allMovies = JSON.parse(body);
+    for (const result of allMovies.results) {
+      for (const character of result.characters) {
+        if (character === WedgeAntilles) {
+          counter += 1;
+        }
       }
     }
+    console.log(counter);
   }
-  console.log(counter);
 });
