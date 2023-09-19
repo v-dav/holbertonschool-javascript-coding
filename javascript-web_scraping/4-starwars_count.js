@@ -1,7 +1,6 @@
 #!/usr/bin/node
 
 const request = require('request');
-const WedgeAntilles = 'https://swapi-api.hbtn.io/api/people/18/';
 const filmsUrl = process.argv[2];
 let counter = 0;
 
@@ -10,15 +9,13 @@ request(filmsUrl, (error, response, body) => {
     console.error(error);
     return;
   }
-  if (filmsUrl === 'https://swapi-api.hbtn.io/api/films/') {
-    const allMovies = JSON.parse(body);
-    for (const result of allMovies.results) {
-      for (const character of result.characters) {
-        if (character === WedgeAntilles) {
-          counter += 1;
-        }
+  const allMovies = JSON.parse(body);
+  for (const result of allMovies.results) {
+    for (const character of result.characters) {
+      if (character.includes('18')) {
+        counter += 1;
       }
     }
-    console.log(counter);
   }
+  console.log(counter);
 });
