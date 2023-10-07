@@ -1,12 +1,7 @@
-function askName() {
-  console.log('Welcome to Holberton School, what is your name?');
-  process.stdin.on('data', (data) => {
-    const input = data.toString().trim();
-    console.log(`Your name is: ${input}`);
-    console.log('This important software is now closing');
-    process.exit();
-  });
-}
-
-module.exports = askName;
-askName();
+process.stdout.write('Welcome to Holberton School, what is your name?\n');
+process.stdin.on('data', (data) => {
+	let input = data.toString()
+	process.stdout.write(`Your name is: ${input}\r`);
+	process.stdout.write('This important software is now closing\n');
+	process.exit();
+});
