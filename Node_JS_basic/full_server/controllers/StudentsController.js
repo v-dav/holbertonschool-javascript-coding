@@ -4,7 +4,6 @@ const path = process.argv[2];
 
 class StudentsController {
   static getAllStudents(request, response) {
-    response.status(200);
     readDatabase(path)
       .then((data) => {
         const fields = Object.keys(data)
@@ -15,7 +14,8 @@ class StudentsController {
           const count = names.length;
           const list = names.join(', ');
           results.push(`Number of students in ${field}: ${count}. List: ${list}`);
-        }
+				}
+				response.status(200);
         response.send(results.join('\n'));
       })
       .catch((err) => {
@@ -25,7 +25,6 @@ class StudentsController {
   }
 
   static getAllStudentsByMajor(request, response) {
-    response.status(200);
     const requestUrl = request.params.major;
     const match = requestUrl.match(/CS|SWE/);
     if (!match) {
@@ -34,7 +33,8 @@ class StudentsController {
     }
     readDatabase(path)
       .then((data) => {
-        const namesList = data[match];
+				const namesList = data[match];
+				response.status(200);
         response.send(`List: ${namesList.join(', ')}`);
       })
       .catch((err) => {
