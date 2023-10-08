@@ -8,4 +8,4 @@ app.use('', index);
 
 app.listen(port);
 
-module.exports = app;
+export default app;
