@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs').promises;
+
 const app = express();
 const port = 1245;
 
@@ -66,7 +67,7 @@ app.get('/students', (req, res) => {
       res.send(`This is the list of our students\n${data.join('\n')}`);
     })
     .catch((err) => {
-      res.send(err.message);
+      res.send(`This is the list of our students\n${err.message}`);
     });
 });
 
