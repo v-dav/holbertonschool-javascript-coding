@@ -1,13 +1,16 @@
+// import a module needed to work with files
+const fs = require('fs');
+
 function countStudents(path) {
-  // import a module needed to work with files
-  const fs = require('fs');
   let data = '';
+
+  // get the file data synchronously
   try {
-    // get the file data synchronously
     data = fs.readFileSync(path, 'utf8');
   } catch (err) {
     throw new Error('Cannot load the database');
   }
+
   // convert data to string
   const stringData = data.toString();
 
@@ -41,10 +44,10 @@ function countStudents(path) {
   });
 
   // print the customized message
-  for (const field in namesByField) {
+  const fields = Object.keys(namesByField);
+  for (const field of fields) {
     const names = namesByField[field];
     const count = names.length;
-    // create a string from the array
     const list = names.join(', ');
     console.log(`Number of students in ${field}: ${count}. List: ${list}`);
   }
