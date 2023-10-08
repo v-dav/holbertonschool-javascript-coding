@@ -1,6 +1,6 @@
 const readDatabase = require('../utils');
 
-const path = process.argv[2];
+const path = process.argv[2].toString();
 
 class StudentsController {
   static getAllStudents(request, response) {
