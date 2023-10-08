@@ -6,8 +6,7 @@ class StudentsController {
   static getAllStudents(request, response) {
     readDatabase(path)
       .then((data) => {
-        const fields = Object.keys(data)
-          .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+				const fields = Object.keys(data).sort();
         const results = ['This is the list of our students'];
         for (const field of fields) {
           const names = data[field];
