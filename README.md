@@ -11,7 +11,7 @@ Welcome to the JavaScript Learning Projects repository! This repository contains
 
 ### Project List
 
-- [JavaScript - Web Scraping](./web_scraping)
+- [JavaScript - Web Scraping](https://github.com/v-dav/holbertonschool-javascript-coding/tree/main/javascript-web_scraping)
 - [ES6 Basic](https://github.com/v-dav/holbertonschool-web_back_end/tree/main/ES6_basic)
 - [ES6 Classes](https://github.com/v-dav/holbertonschool-web_back_end/tree/main/ES6_classes)
 - [ES6 Data Manipulation](https://github.com/v-dav/holbertonschool-web_back_end/tree/main/ES6_data_manipulation)
