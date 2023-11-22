@@ -16,7 +16,7 @@ Welcome to the JavaScript Learning Projects repository! This repository contains
 - [ES6 Classes](https://github.com/v-dav/holbertonschool-web_back_end/tree/main/ES6_classes)
 - [ES6 Data Manipulation](https://github.com/v-dav/holbertonschool-web_back_end/tree/main/ES6_data_manipulation)
 - [ES6 Promises](https://github.com/v-dav/holbertonschool-web_back_end/tree/main/ES6_promise)
-- [NodeJS Basics](./nodejs_basics)
+- [NodeJS Basics](https://github.com/v-dav/holbertonschool-javascript-coding/tree/main/Node_JS_basic)
 - [JavaScript DOM Manipulation](https://github.com/v-dav/holbertonschool-higher_level_programming/tree/main/javascript-dom_manipulation)
 - [JavaScript - Web jQuery](https://github.com/v-dav/holbertonschool-higher_level_programming/tree/main/javascript-web_jquery)
 
