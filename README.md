@@ -1,8 +1,8 @@
-# JavaScript Learning Projects - Holberton School
-
 ![Node.js Version](https://img.shields.io/badge/Node.js-12.x.x-blue.svg)
 ![Express.js](https://img.shields.io/badge/Express.js-Web_Framework-red.svg)
 ![ES6](https://img.shields.io/badge/ES6-ECMAScript_2015-yellow.svg)
+
+![image](https://github.com/v-dav/holbertonschool-javascript-coding/assets/115344057/9845231e-4e3d-4db7-9963-02339f384f4e)
 
 
 ## Overview
