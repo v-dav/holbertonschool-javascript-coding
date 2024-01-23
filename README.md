@@ -19,6 +19,7 @@ Welcome to the JavaScript Learning Projects repository! This repository contains
 - [NodeJS Basics](https://github.com/v-dav/holbertonschool-javascript-coding/tree/main/Node_JS_basic)
 - [JavaScript DOM Manipulation](https://github.com/v-dav/holbertonschool-higher_level_programming/tree/main/javascript-dom_manipulation)
 - [JavaScript - Web jQuery](https://github.com/v-dav/holbertonschool-higher_level_programming/tree/main/javascript-web_jquery)
+- [JavaScript - Advanced](https://github.com/v-dav/holbertonschool-web_front_end/tree/main/Javascript_advanced)
 
 ## Technology Stack
 
