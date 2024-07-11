@@ -1,4 +1,3 @@
-```markdown
 # Dog Glossary
 
 ![HTML](https://img.shields.io/badge/HTML-5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
