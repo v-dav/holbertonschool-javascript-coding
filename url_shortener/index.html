@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>URL Shortener</title>
+    <style>
+        h1 {
+            font-family: "Adobe Arabic",serif ;
+        }
+        body {
+            text-align: center;
+        }
+
+        button {
+            background-color: cornflowerblue;
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        #input-url {
+            padding: 13px;
+            border-radius: 5px;
+        }
+
+        span {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        ol {
+            list-style-type: none;
+        }
+
+        li {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>URL Shortener</h1>
+<input type="text" id="input-url" placeholder="Enter a url">
+<button type="button" id="button-create" onclick="generateUrl()">Create</button>
+<button type="button" id="button-delete" onclick="deleteUrl()">Delete</button>
+<div class="container">
+    <ol id="list-url">
+
+    </ol>
+</div>
+<script>
+    function generateUrl() {
+        const inputUrl = document.getElementById("input-url").value.trim();
+        const list = document.getElementById("list-url");
+        let validUrl = urlValidityChecker(inputUrl);
+        if (validUrl) {
+            let constantUrlPart = "localhost/";
+            let variableUrlPart = randomUrlSet(5);
+            if (document.querySelector("p")) {
+                document.querySelector("p").remove();
+            }
+            const outputUrl = constantUrlPart + variableUrlPart;
+            const li = document.createElement("li");
+            const a = document.createElement("a");
+            a.innerText = outputUrl;
+            a.setAttribute("href", inputUrl);
+            a.setAttribute("target", "_blank");
+            li.append(a);
+
+            // Click counter part
+            const clickCounter = document.createElement("span");
+            clickCounter.innerHTML = "Clicks: 0";
+            li.append(" - " + inputUrl + " - ");
+            li.append(clickCounter);
+
+            // Edit part
+            const editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            li.append(editButton);
+            list.append(li);
+
+            // Counter logic
+            let count = 0;
+            a.addEventListener("click", () => {
+                count++;
+                clickCounter.innerHTML = "Clicks: " + count;
+            })
+
+            const editInput = document.createElement("input");
+            const saveButton = document.createElement("button");
+            saveButton.textContent = "Save";
+            editInput.value = variableUrlPart;
+
+            // Edit logic
+            editButton.addEventListener("click", () => {
+                a.remove();
+                editButton.remove();
+                li.prepend(editInput);
+                li.append(saveButton);
+            });
+
+            // Save logic
+            saveButton.addEventListener("click", () => {
+                variableUrlPart = editInput.value;
+                a.innerText = constantUrlPart + variableUrlPart;
+                li.prepend(a);
+                editInput.remove();
+                saveButton.remove();
+                li.append(editButton);
+            })
+        } else {
+            if (!document.querySelector("p")) {
+                const errorMessage = document.createElement("p");
+                errorMessage.textContent = "Please enter a valid url";
+                list.after(errorMessage);
+            }
+        }
+    }
+
+    function urlValidityChecker(url) {
+        const re = /^https:\/\/([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}\/[a-zA-Z0-9-_].+$/;
+        return re.test(url);
+    }
+
+    function randomUrlSet(length) {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let result = "";
+        for (let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
+    function deleteUrl() {
+        const input = document.getElementById("input-url").value.trim();
+        const list = document.getElementById("list-url");
+        if (input === "") {
+            list.innerHTML = "";
+        } else {
+            const allLinks = Array.from(list.getElementsByTagName("li"));
+            console.log(allLinks);
+            for (let link of allLinks) {
+                const a = link.getElementsByTagName("a")[0];
+                const textNode = a.nextSibling;
+                if(textNode.nodeValue.trim().includes(input)) {
+                    link.remove();
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>
