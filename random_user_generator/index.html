@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hello, World!</title>
+</head>
+<body id="body">
+<h1>Random User Generator</h1>
+<button id="get-user-button" onclick="fetchUser()">Get User</button>
+<button id="save-users-button" onclick="saveUsers()">Save Users</button>
+<div class="user" id="user"></div>
+
+<script>
+    let users = [];
+
+    fetchUser();
+
+    if (sessionStorage.length > 0) {
+        const savedUsersDiv = document.createElement("div");
+        savedUsersDiv.setAttribute("class", "saved");
+        savedUsersDiv.setAttribute("id", "saved");
+        savedUsersDiv.innerHTML = "<h3>Saved Users</h3>";
+        const userContainer = document.getElementById("user");
+        userContainer.after(savedUsersDiv);
+        displaySavedUsers();
+    }
+
+    async function fetchUser() {
+        try {
+            const result = await fetch("https://randomuser.me/api/");
+            const data = await result.json()
+
+            const largePicture = data.results[0].picture.large;
+            const firstName = data.results[0].name.first;
+            const lastName = data.results[0].name.last;
+            const email = data.results[0].email;
+            const password = data.results[0].login.password;
+            const city = data.results[0].location.city;
+            const country = data.results[0].location.country;
+            const gender = data.results[0].gender;
+            const phone = data.results[0].phone;
+            const dateOfBirth = data.results[0].dob.date;
+
+            const user = {
+                largePicture,
+                firstName,
+                lastName,
+                email,
+                password,
+                city,
+                country,
+                gender,
+                phone,
+                dateOfBirth
+            }
+
+            users.push(user);
+
+            addToHtml("user", largePicture, firstName, lastName,
+                email, password, city, country,
+                gender, phone, dateOfBirth);
+
+        } catch (error) {
+            alert(error);
+        }
+    }
+
+    function addToHtml(element, largePicture, firstName, lastName,
+                       email, password, city, country,
+                       gender, phone, dateOfBirth) {
+        // Create elements
+        const div = document.getElementById(element);
+
+        const divUser = document.createElement("div");
+        divUser.classList.add('user');
+
+        const image = document.createElement("img");
+        image.setAttribute("alt", "Large Image");
+        image.setAttribute("class", "photo");
+        image.setAttribute("src", largePicture);
+
+        const h2 = document.createElement("h2");
+        h2.textContent = firstName + " " + lastName;
+        h2.setAttribute("class", "name");
+
+        const emailP = document.createElement("p");
+        emailP.setAttribute("class", "email");
+        emailP.textContent = "Email: " + email;
+
+        const passwordP = document.createElement("p");
+        passwordP.setAttribute("class", "password");
+        passwordP.textContent = "Password: " + password;
+
+        const genderP = document.createElement("p");
+        genderP.setAttribute("class", "gender");
+        genderP.textContent = "Gender: " + gender;
+
+        const phoneP = document.createElement("p");
+        phoneP.setAttribute("class", "phone");
+        phoneP.textContent = "Phone: " + phone;
+
+        const locationP = document.createElement("p");
+        locationP.setAttribute("class", "location");
+        locationP.textContent = "Location: " + city + ", " + country;
+
+        const birthdayP = document.createElement("p");
+        birthdayP.setAttribute("class", "birthday");
+        const datePattern = /^\d{4}-\d{2}-\d{2}/;
+        const dateMatch = dateOfBirth.match(datePattern);
+        const originalDateString = dateMatch[0];
+        const originalArray = originalDateString.split("-");
+        const modifiedFormat = originalArray[2] + "/" + originalArray[1] + "/" + originalArray[0];
+        birthdayP.textContent = "Birthday: " + modifiedFormat;
+
+        // Append elements
+        divUser.append(h2);
+        divUser.append(passwordP);
+        divUser.append(emailP);
+        divUser.append(locationP);
+        divUser.append(genderP);
+        divUser.append(phoneP);
+        divUser.append(birthdayP);
+        divUser.append(image);
+
+        div.append(divUser);
+    }
+
+    function saveUsers() {
+        sessionStorage.clear();
+
+        users.forEach((user, index) => {
+            sessionStorage.setItem(index, JSON.stringify(user));
+        });
+
+        let savedUsersDiv = document.getElementById("saved");
+        if (!savedUsersDiv) {
+            savedUsersDiv = document.createElement("div");
+            savedUsersDiv.setAttribute("class", "saved");
+            savedUsersDiv.setAttribute("id", "saved");
+            savedUsersDiv.innerHTML = "<h3>Saved Users</h3>";
+            const userContainer = document.getElementById("user");
+            userContainer.after(savedUsersDiv);
+        }
+
+        displaySavedUsers();
+    }
+
+    function displaySavedUsers() {
+        const savedUsersDiv = document.getElementById("saved");
+        if (!savedUsersDiv) return;
+
+        savedUsersDiv.innerHTML = "<h3>Saved Users</h3>";  // Clear existing content
+
+        if (sessionStorage.length > 0) {
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const user = JSON.parse(sessionStorage.getItem(i));
+                addToHtml("saved", user.largePicture, user.firstName, user.lastName,
+                    user.email, user.password, user.city, user.country,
+                    user.gender, user.phone, user.dateOfBirth);
+            }
+        }
+    }
+</script>
+</body>
+</html>
