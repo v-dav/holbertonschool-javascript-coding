@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        /* Title Style */
+        .title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Textarea Style */
+        textarea {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Container */
+        button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex: 1; /* Ensure all buttons take up equal space */
+            max-width: 150px; /* Optional: limit the maximum width of each button */
+            text-align: center;
+        }
+
+        #upper-case, #lower-case, #proper-case, #sentence-case, #save-text-file {
+            background-color: #ff7700;
+            color: white;
+        }
+
+        #upper-case:hover, #lower-case:hover, #proper-case:hover, #sentence-case:hover, #save-text-file:hover {
+            background-color: #0056b3;
+        }
+
+        /* Button Container */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+<div class="title">Case Converter</div>
+<textarea id="textarea" cols="45" rows="15"></textarea>
+<div class="button-container">
+    <button id="upper-case">UPPER CASE</button>
+    <button id="lower-case">lower case</button>
+    <button id="proper-case">Proper Case</button>
+    <button id="sentence-case">Sentence case</button>
+    <button id="save-text-file">Save Text File</button>
+</div>
+</body>
+<script>
+    const upperCaseBtn = document.getElementById("upper-case");
+    const lowerCaseBtn = document.getElementById("lower-case");
+    const properCaseBtn = document.getElementById("proper-case");
+    const sentenceCaseBtn = document.getElementById("sentence-case");
+    const textArea = document.getElementById("textarea");
+    const saveFile = document.getElementById("save-text-file");
+
+    upperCaseBtn.addEventListener("click", () => {
+        const originalText = textArea.value;
+        if (!originalText) return;
+
+        textArea.value = originalText.toUpperCase();
+    })
+
+    lowerCaseBtn.addEventListener("click", () => {
+        const originalText = textArea.value;
+        if (!originalText) return;
+
+        textArea.value = originalText.toLowerCase();
+    })
+
+    properCaseBtn.addEventListener("click", () => {
+        const originalText = textArea.value.trim();
+        if (!originalText) return;
+
+        const wordsArray = originalText.split(" ");
+        if (wordsArray.length > 1) {
+            const upperWordsArray = wordsArray.map(word => word ? word[0].toUpperCase() + word.slice(1) : "");
+            textArea.value = upperWordsArray.join(" ");
+        } else {
+            textArea.value = originalText.charAt(0).toUpperCase() + originalText.slice(1);
+        }
+    })
+
+    sentenceCaseBtn.addEventListener("click", () => {
+        let sentences = textArea.value.toLowerCase().split('. ');
+        let modifiedSentences = [];
+        for (let sentence of sentences) {
+            let modifiedSentence = sentence.charAt(0).toUpperCase().concat(sentence.slice(1));
+            modifiedSentences.push(modifiedSentence);
+        }
+        textArea.value = modifiedSentences.join('. ');
+    });
+
+    saveFile.addEventListener("click", () => {
+        const originalText = textArea.value;
+        if (!originalText) return;
+
+        const blob = new Blob([originalText], {type: "text/plain"});
+
+        // Step 3: Create a link element
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        console.log(link.href);
+        link.download = "text.txt"; // Set the name of the file
+
+        // Step 4: Trigger the download
+        link.click();
+
+        // Optional: Clean up the URL object after download
+        URL.revokeObjectURL(link.href);
+    })
+</script>
+</html>
