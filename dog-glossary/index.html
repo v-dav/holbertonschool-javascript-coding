@@ -1,157 +1,384 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <title>Hello, World!</title>
-    <link rel="stylesheet" href="./styles.css"></link>
+	<meta charset="utf-8">
+	<title>Hello, Dog!</title>
+	<style>
+		/* General Styles */
+		body,
+		h1,
+		button,
+		input,
+		div {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Roboto', sans-serif;
+			background-color: #f4f4f4;
+			color: #333;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 100vh;
+		}
+
+		.page {
+			background-color: #fff;
+			border-radius: 8px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			padding: 20px;
+			max-width: 400px;
+			width: 100%;
+			text-align: center;
+		}
+
+		h1 {
+			font-size: 24px;
+			color: #222;
+			margin-bottom: 20px;
+			padding-bottom: 10px;
+		}
+
+		.menu {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			margin-bottom: 20px;
+		}
+
+		.menu button,
+		.menu input {
+			padding: 10px 15px;
+			font-size: 16px;
+			border-radius: 5px;
+			border: 1px solid #ddd;
+			transition: background-color 0.3s, border-color 0.3s;
+		}
+
+		.menu button {
+			background-color: #007bff;
+			color: white;
+			border: none;
+			cursor: pointer;
+		}
+
+		.menu button:hover {
+			background-color: #0056b3;
+		}
+
+		.menu input {
+			border: 1px solid #ddd;
+			background-color: #f9f9f9;
+		}
+
+		.menu input:focus {
+			border-color: #007bff;
+			outline: none;
+		}
+
+		#content {
+			margin-top: 20px;
+		}
+
+		#content img {
+			max-width: 100%;
+			border-radius: 8px;
+			margin-top: 20px;
+		}
+
+		#error {
+			color: #e74c3c;
+			font-weight: bold;
+		}
+
+		/* Breed List Styling */
+		#content ol {
+			list-style-type: none;
+			padding-left: 0;
+			margin-top: 20px;
+			font-size: 16px;
+			color: #333;
+		}
+
+		#content ol li {
+			padding: 10px;
+			background-color: #f9f9f9;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			margin-bottom: 8px;
+			transition: background-color 0.3s, transform 0.2s;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			cursor: pointer;
+		}
+
+		#content ol li:hover {
+			background-color: #e3e3e3;
+			transform: translateX(5px);
+		}
+
+		#content ol li ul {
+			list-style-type: disc;
+			padding-left: 20px;
+			margin-top: 10px;
+			color: #555;
+			display: none;
+			/* Initially hide sub-breed lists */
+		}
+
+		/* Triangle Indicator for breeds with sub-breeds */
+		#content ol li.has-subbreeds::after {
+			content: "▶";
+			font-size: 12px;
+			color: #007bff;
+			transition: transform 0.3s;
+		}
+
+		#content ol li.has-subbreeds.expanded::after {
+			transform: rotate(90deg);
+		}
+
+		#content>ol>li:nth-child(6)>ul>li {
+			text-align: center;
+			justify-content: center;
+		}
+
+		#content h1 {
+			padding: 0;
+			margin: 0;
+		}
+
+		.subbreed-card {
+			padding: 10px;
+			background-color: #ffa600c7;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			margin-bottom: 8px;
+			transition: background-color 0.3s, transform 0.2s;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			cursor: pointer;
+		}
+
+		/* Responsive Design */
+		@media (max-width: 500px) {
+			.page {
+				padding: 15px;
+			}
+
+			h1 {
+				font-size: 20px;
+			}
+
+			.menu button,
+			.menu input {
+				font-size: 14px;
+				padding: 8px 10px;
+			}
+
+			#content img {
+				margin-top: 15px;
+			}
+		}
+	</style>
 </head>
+
 <body>
-<div class="page">
-    <h1>Dog Glossary</h1>
-    <div class="menu">
-        <button type="button" id="button-random-dog" onclick="getRandomDog()">Show Random Dog</button>
-        <input type="text" id="input-breed" placeholder="Enter a breed">
-        <button type="button" id="button-show-breed" onclick="getDogByBreed()">Show Breed</button>
-        <button type="button" id="button-show-sub-breed" onclick="getSubBreed()">Show Sub-Breed</button>
-        <button type="button" id="button-show-all" onclick="showAllBreeds()">Show All Breeds</button>
-    </div>
-    <div id="content"></div>
-</div>
-<script>
-    async function getRandomDog() {
-        const content = document.getElementById("content");
-        try {
-            const result = await fetch("https://dog.ceo/api/breeds/image/random");
-            const data = await result.json();
-            const newImage = document.createElement("img");
-            newImage.setAttribute("src", data.message);
+	<div class="page">
+		<h1>Dog Glossary</h1>
+		<div class="menu">
+			<button type="button" id="button-random-dog" onclick="getRandomDog()">Show Random Dog</button>
+			<input type="text" id="input-breed" placeholder="Enter a breed">
+			<button type="button" id="button-show-breed" onclick="getDogByBreed()">Show Breed</button>
+			<button type="button" id="button-show-sub-breed" onclick="getSubBreed()">Show Sub-Breed</button>
+			<button type="button" id="button-show-all" onclick="showAllBreeds()">Show All Breeds</button>
+		</div>
+		<div id="content"></div>
+	</div>
+	<script>
+		async function getRandomDog() {
+			const content = document.getElementById("content");
+			try {
+				const result = await fetch("https://dog.ceo/api/breeds/image/random");
+				const data = await result.json();
+				const newImage = document.createElement("img");
+				newImage.setAttribute("src", data.message);
 
-            /*
-            const tokens = data.message.split("/");
-            const name = document.createElement("p");
-            name.textContent = tokens[4];
-            content.prepend(name);
-            */
+				const oldImage = document.querySelector("img");
+				content.innerHTML = "";
+				content.append(newImage);
 
-            const oldImage = document.querySelector("img");
-            content.innerHTML = "";
-            content.append(newImage);
-        } catch (error) {
-            alert(error);
-        }
-    }
+				const tokens = data.message.split("/");
+				const dogTitle = document.createElement("h1");
+				dogTitle.innerText = tokens[4]
+				content.prepend(dogTitle);
 
-    async function getDogByBreed() {
-        let errorParagraph = document.createElement("p");
-        errorParagraph.setAttribute("id", "error");
+				document.getElementById("input-breed").value = tokens[4];
+			} catch (error) {
+				alert(error);
+			}
+		}
 
-        let breed = document.getElementById("input-breed").value.toLowerCase();
-        const content = document.getElementById("content");
-        const url = "https://dog.ceo/api/breed/" + breed + "/images/random";
-        const oldImage = document.querySelector("img");
-        const error = document.getElementById("error");
+		async function getDogByBreed() {
+			let errorParagraph = document.createElement("p");
+			errorParagraph.setAttribute("id", "error");
 
-        if (breed !== "") {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    content.innerHTML = "";
-                    errorParagraph.textContent = "Breed not found!";
-                    content.append(errorParagraph);
-                } else {
-                    const data = await response.json();
-                    const newImage = document.createElement("img");
-                    newImage.setAttribute("src", data.message);
-                    content.innerHTML = "";
-                    content.append(newImage);
-                }
-            } catch (error) {
-                alert(error);
-            }
-        } else {
-            content.innerHTML = "";
-            errorParagraph.textContent = "Please enter a breed";
-            content.append(errorParagraph);
-        }
-    }
+			let breed = document.getElementById("input-breed").value.toLowerCase();
+			const content = document.getElementById("content");
+			const url = "https://dog.ceo/api/breed/" + breed + "/images/random";
+			const oldImage = document.querySelector("img");
+			const error = document.getElementById("error");
 
-    async function getSubBreed() {
-        let errorParagraph = document.createElement("p");
-        errorParagraph.setAttribute("id", "error");
-        let breed = document.getElementById("input-breed").value.toLowerCase();
+			if (breed !== "") {
+				try {
+					const response = await fetch(url);
+					if (!response.ok) {
+						content.innerHTML = "";
+						errorParagraph.textContent = "Breed not found!";
+						content.append(errorParagraph);
+					} else {
+						const data = await response.json();
+						const newImage = document.createElement("img");
+						newImage.setAttribute("src", data.message);
+						content.innerHTML = "";
+						content.append(newImage);
 
-        const content = document.getElementById("content");
-        const url = "https://dog.ceo/api/breed/" + breed + "/list";
+						const tokens = data.message.split("/");
+						const dogTitle = document.createElement("h1");
+						dogTitle.innerText = tokens[4]
+						content.prepend(dogTitle);
+					}
+				} catch (error) {
+					alert(error);
+				}
+			} else {
+				content.innerHTML = "";
+				errorParagraph.textContent = "Please enter a breed";
+				content.append(errorParagraph);
+			}
+		}
 
-        const oldImage = document.querySelector("img");
-        const error = document.getElementById("error");
+		// Existing functions...
 
-        if (breed !== "") {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    content.innerHTML = "";
-                    errorParagraph.textContent = "Breed not found!";
-                    content.append(errorParagraph);
-                } else {
-                    content.innerHTML = "";
-                    const data = await response.json();
-                    const subBreeds = data.message;
-                    if (subBreeds.length > 0) {
-                        const list = document.createElement("ol");
-                        subBreeds.forEach((breed) => {
-                            const li = document.createElement("li");
-                            li.textContent = breed;
-                            list.append(li);
-                        })
-                        content.append(list);
-                    } else {
-                        errorParagraph.textContent = "No sub-breeds found!";
-                        content.append(errorParagraph);
-                    }
-                }
-            } catch (error) {
-                alert(error);
-            }
-        } else {
-            content.innerHTML = "";
-            errorParagraph.textContent = "Please enter a sub-breed!";
-            content.append(errorParagraph);
-        }
-    }
+		async function getSubBreed() {
+			let errorParagraph = document.createElement("p");
+			errorParagraph.setAttribute("id", "error");
+			let breed = document.getElementById("input-breed").value.toLowerCase();
 
-    async function showAllBreeds() {
-        const content = document.getElementById("content");
-        content.innerHTML = "";
-        try {
-            const result = await fetch("https://dog.ceo/api/breeds/list/all");
-            const data = await result.json();
-            const breedObject = data.message;
-            const list = document.createElement("ol");
-            for (const breed in breedObject) {
-                const breedItem = document.createElement("li");
-                breedItem.textContent = breed;
-                const subBreads = breedObject[breed];
-                if (subBreads.length > 0) {
-                    const subBreadList = document.createElement("ul");
-                    /*
-                    for (const subBreed of subBreads) {
-                        const subBreedItem = document.createElement("li");
-                        subBreedItem.textContent = subBreed;
-                        subBreadList.append(subBreedItem);
-                    } */
-                    const subBreedItem = document.createElement("li");
-                    subBreedItem.textContent = subBreads.toString();
-                    subBreadList.append(subBreedItem);
-                    breedItem.append(subBreadList);
-                }
-                list.append(breedItem);
-                content.append(list);
-            }
-        } catch (error) {
-            alert(error);
-        }
-    }
-</script>
+			const content = document.getElementById("content");
+			const url = "https://dog.ceo/api/breed/" + breed + "/list";
+
+			content.innerHTML = "";
+
+			if (breed !== "") {
+				try {
+					const response = await fetch(url);
+					if (!response.ok) {
+						errorParagraph.textContent = "Breed not found!";
+						content.append(errorParagraph);
+					} else {
+						const data = await response.json();
+						const subBreeds = data.message;
+						if (subBreeds.length > 0) {
+							subBreeds.forEach(subBreed => {
+								const subBreedCard = document.createElement("div");
+								subBreedCard.className = "subbreed-card";
+								subBreedCard.textContent = subBreed;
+								subBreedCard.addEventListener('click', () => fetchSubBreedImage(breed, subBreed));
+								content.append(subBreedCard);
+							});
+						} else {
+							errorParagraph.textContent = "No sub-breeds found!";
+							content.append(errorParagraph);
+						}
+					}
+				} catch (error) {
+					alert(error);
+				}
+			} else {
+				errorParagraph.textContent = "Please enter a breed!";
+				content.append(errorParagraph);
+			}
+		}
+
+		async function showAllBreeds() {
+			const content = document.getElementById("content");
+			content.innerHTML = "";
+			try {
+				const result = await fetch("https://dog.ceo/api/breeds/list/all");
+				const data = await result.json();
+				const breedObject = data.message;
+				const list = document.createElement("ol");
+
+				for (const breed in breedObject) {
+					const breedItem = document.createElement("li");
+					breedItem.textContent = breed;
+					const subBreeds = breedObject[breed];
+					if (subBreeds.length > 0) {
+						breedItem.classList.add('has-subbreeds');
+
+						breedItem.addEventListener('click', function () {
+							this.classList.toggle('expanded');
+
+							const existingSubBreedCards = document.querySelectorAll(`.subbreed-card[data-breed="${breed}"]`);
+							if (existingSubBreedCards.length > 0) {
+								existingSubBreedCards.forEach(card => card.remove());
+							} else {
+								subBreeds.forEach(subBreed => {
+									const subBreedCard = document.createElement("div");
+									subBreedCard.className = "subbreed-card";
+									subBreedCard.setAttribute("data-breed", breed);
+									subBreedCard.textContent = subBreed;
+									subBreedCard.addEventListener('click', (event) => {
+										event.stopPropagation(); // Prevent triggering the breed click
+										fetchSubBreedImage(breed, subBreed);
+									});
+									list.insertBefore(subBreedCard, breedItem.nextSibling);
+								});
+							}
+						});
+					} else {
+						breedItem.addEventListener('click', () => fetchSubBreedImage(breed, ''));
+					}
+					list.append(breedItem);
+				}
+				content.append(list);
+			} catch (error) {
+				alert(error);
+			}
+		}
+
+		async function fetchSubBreedImage(breed, subBreed) {
+			const content = document.getElementById("content");
+			const url = subBreed
+				? `https://dog.ceo/api/breed/${breed}/${subBreed}/images/random`
+				: `https://dog.ceo/api/breed/${breed}/images/random`;
+
+			try {
+				const response = await fetch(url);
+				const data = await response.json();
+				const imageUrl = data.message;
+				content.innerHTML = ""; // Clear previous content
+				const imgElement = document.createElement("img");
+				imgElement.src = imageUrl;
+				imgElement.alt = `${subBreed ? subBreed : breed}`;
+				content.append(imgElement);
+
+				const tokens = data.message.split("/");
+				const dogTitle = document.createElement("h1");
+				dogTitle.innerText = tokens[4]
+				content.prepend(dogTitle);
+			} catch (error) {
+				alert(error);
+			}
+		}
+	</script>
 </body>
+
 </html>
